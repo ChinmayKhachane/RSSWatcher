@@ -1,0 +1,27 @@
+feeds:
+  # Feed with custom extracted fields via expr-lang
+  - name: hn-frontpage
+    url: https://news.ycombinator.com/rss
+    interval: 300
+    user_agent: RSSWatcher/0.1
+    schema:
+      title_upper:
+        type: string
+        from: title
+        expr: upper($)
+        index: true
+      published_year:
+        type: int
+        from: published
+        expr: $.Year()
+      first_category:
+        type: string
+        from: categories
+        expr: len($) > 0 ? $[0] : ""
+
+  # Feed with no custom fields — only the built-in SimpilfiedItems
+  # shape (title, description, content, link, updated, published,
+  # author, categories) will be produced.
+  - name: plain-feed
+    url: https://example.com/feed.xml
+    interval: 600
